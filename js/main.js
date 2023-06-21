@@ -1,3 +1,1 @@
-const numbers = [1,2,3];
-
-console.log(numbers);
+import './tempGeneration.js';
