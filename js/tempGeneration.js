@@ -9,8 +9,7 @@ const templateCard = document.querySelector('#card')
 const createCards = (dataDetail) => {
   const fragmentCard = document.createDocumentFragment();
 
-  //dataDetail.length
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < dataDetail.length; i++) {
     const tempInfoCard = templateCard.cloneNode(true);
 
     tempInfoCard.querySelector('.popup__title').textContent = dataDetail[i].offer.title;
@@ -35,27 +34,43 @@ const createCards = (dataDetail) => {
     tempInfoCard.querySelector('.popup__text--capacity').textContent = `${dataDetail[i].offer.rooms} комнаты для ${dataDetail[i].offer.guests} гостей`;
     tempInfoCard.querySelector('.popup__text--time').textContent = `Заезд после ${dataDetail[i].offer.checkin}, выезд до ${dataDetail[i].offer.checkout}`;
 
-    const tempFeatures = tempInfoCard.querySelector('.popup__features');
-    const tempListFeatures = tempFeatures.children;
+    const tempFeatures = tempInfoCard.querySelector('.popup__features').children;
+    const featureItem = dataDetail[i].offer.features;
 
-    [...tempListFeatures].forEach((item) => {
+    [...tempFeatures].forEach((item) => {
 
-      const tempItem = dataDetail[i].offer.features;
+      let verify = false;
 
-      let counter = 0;
+      for (let j = 0; j < featureItem.length; j++) {
 
-      for (let j = 0; j < tempItem.length; j++) {
-        if (item.classList[1] === `popup__feature--${tempItem[j]}`) {
-          counter++;
+        if ([...item.classList].join(' ').split('--').includes(featureItem[j])) {
+          verify = true;
         }
+
       }
 
-      counter > 0 ? 1 : item.remove();
-
-      console.log(tempItem);
+      verify === true ? 1 : item.remove();
     });
 
-    console.log(tempListFeatures)
+    tempInfoCard.querySelector('.popup__description').textContent = dataDetail[i].offer.description;
+
+    const fragmentPhotos = document.createDocumentFragment();
+    const tempPhotos = tempInfoCard.querySelector('.popup__photos');
+
+
+    dataDetail[i].offer.photos.forEach((photo) => {
+
+      let tempPhoto = tempPhotos.querySelector('.popup__photo').cloneNode(true);
+      tempPhoto.src = photo;
+
+      tempPhotos.append(tempPhoto);
+    });
+
+    tempPhotos.children[0].remove();
+    tempPhotos.append(fragmentPhotos);
+
+    const tempAvatar = tempInfoCard.querySelector('.popup__avatar');
+    tempAvatar.src = dataDetail[i].author.avatar;
 
     fragmentCard.append(tempInfoCard);
   }
@@ -63,4 +78,8 @@ const createCards = (dataDetail) => {
   return fragmentCard;
 };
 
-console.log(createCards( pushingAds()) );
+const canvasMap = document.querySelector('#map-canvas');
+
+canvasMap.append(createCards(pushingAds()));
+
+console.log(createCards(pushingAds()));

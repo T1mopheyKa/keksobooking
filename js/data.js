@@ -82,7 +82,7 @@ let ads = [];
 const createAdvertisement = (index) => {
   ads.push({
     author: {
-      avatar: `img/avatars/user${index}.png`,
+      avatar: `img/avatars/user${index < 9 ? 0 : ''}${index + 1}.png`,
     },
     offer: {
       title: getRandomArray(titles),
