@@ -34,22 +34,16 @@ const createCards = (dataDetail) => {
     tempInfoCard.querySelector('.popup__text--capacity').textContent = `${dataDetail[i].offer.rooms} комнаты для ${dataDetail[i].offer.guests} гостей`;
     tempInfoCard.querySelector('.popup__text--time').textContent = `Заезд после ${dataDetail[i].offer.checkin}, выезд до ${dataDetail[i].offer.checkout}`;
 
-    const tempFeatures = tempInfoCard.querySelector('.popup__features').children;
-    const featureItem = dataDetail[i].offer.features;
+    const featuresList = tempInfoCard.querySelector('.popup__features');
+    const featureItem = featuresList.querySelectorAll('.popup__feature');
+    const modifiers = dataDetail[i].offer.features.map((feature) => 'popup__feature--' + feature);
 
-    [...tempFeatures].forEach((item) => {
+    featureItem.forEach((item) => {
+      const modifier = item.classList[1];
 
-      let verify = false;
-
-      for (let j = 0; j < featureItem.length; j++) {
-
-        if ([...item.classList].join(' ').split('--').includes(featureItem[j])) {
-          verify = true;
-        }
-
+      if (!modifiers.includes(modifier)) {
+        item.remove();
       }
-
-      verify === true ? 1 : item.remove();
     });
 
     tempInfoCard.querySelector('.popup__description').textContent = dataDetail[i].offer.description;
@@ -81,5 +75,3 @@ const createCards = (dataDetail) => {
 const canvasMap = document.querySelector('#map-canvas');
 
 canvasMap.append(createCards(pushingAds()));
-
-console.log(createCards(pushingAds()));
